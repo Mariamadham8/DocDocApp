@@ -3,6 +3,7 @@ import 'package:mid_project/core/routing/routes.dart';
 
 import '../../features/login/ui/widgets/login_screen.dart';
 import '../../features/onBoarding/ui/widgets/onBoarding.dart';
+import '../../features/signup/ui/wedgits/signup.dart';
 
 class AppRouter{
 
@@ -17,6 +18,10 @@ class AppRouter{
       case Routers.loginScreen:
         return MaterialPageRoute(
           builder: (context) =>loginScreen(),
+        );
+      case Routers.signupScreen:
+        return MaterialPageRoute(
+          builder: (context) =>signupScreen(),
         );
       default:
       return MaterialPageRoute(

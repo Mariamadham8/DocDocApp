@@ -20,10 +20,10 @@ class OnBoardingScreen extends StatelessWidget {
             child: Column(
               children:[
                 DocLogoAndName(),
-                SizedBox(height: 20.h,),
+                SizedBox(height: 10.h,),
                 Stack(
                   children: [
-                    SvgPicture.asset("assets/svgs/Docdoc.svg"),
+                    SvgPicture.asset("assets/svgs/LogoBack.svg"),
                     Container(
                      child: Image(image: AssetImage("assets/images/Image.png")),
                       foregroundDecoration: BoxDecoration(
@@ -49,35 +49,33 @@ class OnBoardingScreen extends StatelessWidget {
                           ),
                         )
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30.w),
-                      child: Column(
-                        children: [
-                          Text("Manage and schedule all of your medical appointments easily with Docdoc to get a new experience.",
-                         style:TextStyles.font32Grey400Bold ,
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 20.h,),
-                          ElevatedButton(
-                              onPressed: (){
-                                context.pushNamed(Routers.loginScreen);
-
-                              },
-                              child: Text("Get Started"),
-                             style: ButtonStyle(
-                                 backgroundColor: MaterialStateProperty.all(Colors.blue) ,
-
-
-                             ),
-                          )
-
-                        ],
-                      ),
-                    )
-
-
-
                   ],
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.h),
+                  child: Column(
+                    children: [
+                      Text("Manage and schedule all of your medical appointments easily with Docdoc to get a new experience.",
+                        style:TextStyles.font14Greyw400 ,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 5.h,),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: (){
+                            context.pushNamed(Routers.loginScreen);
+
+                          },
+                          child: Text("Get Started",style: TextStyle(color: Colors.white),),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Colors.blue) ,
+                          ),
+                        ),
+                      )
+
+                    ],
+                  ),
                 )
 
               ]

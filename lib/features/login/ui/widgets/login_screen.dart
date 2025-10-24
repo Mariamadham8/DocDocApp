@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mid_project/core/helpers/extentions.dart';
 
@@ -7,6 +8,10 @@ import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../../../core/widgets/AppTextFormFeild.dart';
+import '../../data/models/request_body.dart';
+import '../../logic/login_cubit.dart';
+import 'email_password.dart';
+import 'login_bloc_listener.dart';
 
 
 
@@ -43,98 +48,84 @@ class _loginScreenState extends State<loginScreen> {
                         SizedBox(
                           height: 36.h,
                         ),
-                        Form(
-                            child:Column(
+                        Column(
+                          children: [
+                            EmailAndPass(),
+                            SizedBox(height: 24.h,),
+                            Row(
                               children: [
-                                TextFormFeild(hintText: 'Email'),
-                                SizedBox(height: 10.h,),
-                                TextFormFeild(
-                                  hintText: 'Password',
-                                  obscureText: true,
-                              suffixIcon:
-                                 GestureDetector(
-                                   onTap: (){
-                                     setState(() {
-                                       isobscure =!isobscure;
-                                     });
-                                   },
-                                    child: Icon(
-                                        isobscure?Icons.visibility_off:Icons.visibility
-                                    ),
-                                  ),
+                                TextButton(
+                                    onPressed: (){
+                                      validateonLogin(context );
+
+                                    },
+                                    child: Text("Forget Password",
+                                      style: TextStyles.font14Bluew100,
+                                    )
                                 ),
-                                SizedBox(height: 24.h,),
-                                Row(
+                                Spacer(),
+                                Text('Remember me'),
+                                Stack(
                                   children: [
-                                    TextButton(
-                                        onPressed: (){
+                                    Checkbox(value: ischecked,
+                                      onChanged:(bool? value){
+                                        setState(() {
+                                          ischecked =value!;
+                                        });
+                                      },
+                                      shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(10)),
 
-                                        },
-                                        child: Text("Forget Password",
-                                          style: TextStyles.font14Bluew100,
-                                        )
-                                    ),
-                                    Spacer(),
-                                    Text('Remember me'),
-                                    Stack(
-                                      children: [
-                                        Checkbox(value: ischecked,
-                                          onChanged:(bool? value){
-                                            setState(() {
-                                              ischecked =value!;
-                                            });
-                                          },
-                                          shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(10)),
-
-                                        ),
-                                      ],
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 40.h,),
-                                ElevatedButton(
-                                    style: ButtonStyle(
-                                      fixedSize: WidgetStatePropertyAll(Size(300.w, 40.h )),
-                                      backgroundColor: MaterialStateProperty.all(mycolors.myBlue),
-                                    ),
-                                    onPressed:(){
-
-                                    },
-                                    child:Text("Login",
-                                      style: TextStyle(
-                                          color: Colors.white
-                                      ),
-                                    )
+                              ],
+                            ),
+                            SizedBox(height: 40.h,),
+                            ElevatedButton(
+                                style: ButtonStyle(
+                                  fixedSize: WidgetStatePropertyAll(Size(300.w, 40.h )),
+                                  backgroundColor: MaterialStateProperty.all(mycolors.myBlue),
                                 ),
-                                RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: '\n\nBy logging, you agree to our ',
-                                        style: TextStyles.font14Greyw100,
-                                      ),
-                                      TextSpan(
-                                        text: 'Terms & Conditions\n\n',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      TextSpan(
-                                        text: 'Don\'t have an account?',
-                                        style: TextStyles.font14Greyw100,
-                                      ),
-                                      TextSpan(
-                                        text: ' Sign Up',
-                                        style: TextStyles.font14Bluew100,
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            context.pushReplacementNamed(Routers.signupScreen);
-                                          },
-                                      ),
-                                    ],
+                                onPressed:(){
+                                  validateonLogin(context);
+
+                                },
+                                child:Text("Login",
+                                  style: TextStyle(
+                                      color: Colors.white
                                   ),
                                 )
-                              ],
-                            )
+                            ),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '\n\nBy logging, you agree to our ',
+                                    style: TextStyles.font14Greyw100,
+                                  ),
+                                  TextSpan(
+                                    text: 'Terms & Conditions\n\n',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  TextSpan(
+                                    text: 'Don\'t have an account?',
+                                    style: TextStyles.font14Greyw100,
+                                  ),
+                                  TextSpan(
+                                    text: ' Sign Up',
+                                    style: TextStyles.font14Bluew100,
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        context.pushReplacementNamed(Routers.signupScreen);
+                                      },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            LodinBlocListner(),
+
+                          ],
                         )
                       ]
                   ),
@@ -142,6 +133,20 @@ class _loginScreenState extends State<loginScreen> {
             )
         )
     );
+  }
+  validateonLogin(BuildContext context){
+    if(context.read<LoginCubit>().formkey.currentState!.validate()){
+        context.read<LoginCubit>().EmitState(
+          LoginRequestBody(
+            email: context.read<LoginCubit>().emailController.text,
+            password: context.read<LoginCubit>().PasswordController.text,
+          )
+        );
+    }
+
+
+
+
   }
 }
 

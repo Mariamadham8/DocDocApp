@@ -11,11 +11,18 @@ class TextFormFeild extends StatelessWidget {
   final suffixIcon;
   final hintStyle;
   final obscureText;
-  const TextFormFeild({super.key,this.hintText,this.hintStyle,this.obscureText,this.suffixIcon});
+  final TextEditingController? controller;
+  final Function(String?)? validator;
+  const TextFormFeild({super.key,this.hintText,this.hintStyle,this.obscureText,this.suffixIcon, this.controller, this.validator});
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return  TextFormField(
+      controller: controller,
+      validator: (value) => validator!(value),
       decoration: InputDecoration(
         fillColor: mycolors.lightWhite,
         filled: true,
@@ -34,6 +41,20 @@ class TextFormFeild extends StatelessWidget {
             width: 1.3
           )
         ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1.3
+          ),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        focusedErrorBorder:OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.red,
+              width: 1.3
+          ),
+          borderRadius: BorderRadius.circular(16),
+        ) ,
         enabledBorder:OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(

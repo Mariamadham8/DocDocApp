@@ -4,6 +4,7 @@
 import 'package:retrofit/error_logger.dart';
 
 import '../../features/login/data/models/login_response.dart';
+import '../../features/signup/data/models/signup_response.dart';
 import 'api_const.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
@@ -18,6 +19,9 @@ factory ApiServices(Dio dio,{String baseUrl})=_ApiServices;
 @POST(ApiConstants.login)
 Future<LoginResponse> loginUser(@Body() LoginRequestBody);
 
+
+@POST(ApiConstants.register)
+  Future<SignUpResponse> registerUser(@Body() SignUpRequestBody);
 
 
 }

@@ -7,6 +7,8 @@ import 'package:mid_project/core/networking/dio_factory.dart';
 
 import '../../features/login/data/repos/login_repo.dart';
 import '../../features/login/logic/login_cubit.dart';
+import '../../features/signup/data/repo/sigunup_repo.dart';
+import '../../features/signup/logic/signup_cubit.dart';
 
 final getit=GetIt.instance;
 
@@ -16,5 +18,9 @@ void setupDI(){
       getit.registerLazySingleton<ApiServices>(()=>ApiServices(dio));
 
       getit.registerLazySingleton<LoginRepo>(()=>LoginRepo(getit<ApiServices>()));
-      getit.registerLazySingleton<LoginCubit>(()=>LoginCubit(getit<LoginRepo>()));
+      getit.registerFactory<LoginCubit>(()=>LoginCubit(getit<LoginRepo>()));
+
+
+      getit.registerLazySingleton<SignupRepo>(()=>SignupRepo(getit<ApiServices>()));
+      getit.registerFactory<SignupCubit>(()=>SignupCubit(getit<SignupRepo>()));
 }
